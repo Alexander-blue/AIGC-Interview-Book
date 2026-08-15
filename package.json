@@ -1,0 +1,14 @@
+{
+  "name": "aigc-interview-book",
+  "version": "1.0.0",
+  "description": "AIGC/LLM/AI Agent 算法岗与开发岗的面试、研究、职业生涯成长平台",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs && node postbuild.mjs",
+    "preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}

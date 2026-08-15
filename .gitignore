@@ -1,0 +1,15 @@
+# ===== 依赖（本地安装，不进仓库） =====
+node_modules/
+
+# ===== VitePress 构建产物（CI 会自动重新构建，无需提交） =====
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+*.timestamp-*.mjs
+
+# ===== 本地环境 / 编辑器 / 操作系统垃圾 =====
+*.local
+.DS_Store
+Thumbs.db
+
+# ===== WorkBuddy 内部数据（非项目内容，不进仓库） =====
+.workbuddy-ai/
