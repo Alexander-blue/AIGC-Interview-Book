@@ -27,11 +27,13 @@ def strip_prefix(name):
 
 def item_text(fname):
     base = fname[:-3]  # drop .md
-    if base == "README":
+    if base in ("README", "index"):
         return None  # handled by section title
     return strip_prefix(base).replace("-", " ")
 
 sidebar = []
+rewrites = {":dir/README.md": ":dir/index.md"}
+
 for d in sorted(os.listdir(ROOT)):
     full = os.path.join(ROOT, d)
     if not os.path.isdir(full) or d in SKIP:
@@ -40,11 +42,17 @@ for d in sorted(os.listdir(ROOT)):
     md_files = [f for f in os.listdir(full) if f.endswith(".md")]
     md_files.sort()
     items = []
+    
+    # Check if README.md exists and add explicit rewrite just in case
+    if "README.md" in md_files:
+        rewrites[f"{d}/README.md"] = f"{d}/index.md"
+        
     for f in md_files:
-        link = "/" + d + "/" if f == "README.md" else "/" + d + "/" + f[:-3] + "/"
-        if f == "README.md":
+        if f in ("README.md", "index.md"):
+            link = f"/{d}/"
             items.append({"text": title, "link": link})
         else:
+            link = f"/{d}/{f[:-3]}"
             t = item_text(f)
             if t:
                 items.append({"text": t, "link": link})
@@ -61,6 +69,8 @@ export default defineConfig({{
   description: 'AIGC/LLM/AI Agent 算法岗与开发岗的面试、研究、职业生涯成长平台',
   base: '/AIGC-Interview-Book/',
   lang: 'zh-CN',
+  cleanUrls: true,
+  rewrites: {json.dumps(rewrites, ensure_ascii=False, indent=4)},
   themeConfig: {{
     nav: {json.dumps(nav, ensure_ascii=False, indent=6)},
     sidebar: {json.dumps(sidebar, ensure_ascii=False, indent=6)},
@@ -84,3 +94,4 @@ with open(os.path.join(ROOT, ".vitepress", "config.mts"), "w", encoding="utf-8")
 print("config.mts generated")
 print("sections:", len(sidebar))
 print("total items:", sum(len(s["items"]) for s in sidebar))
+
